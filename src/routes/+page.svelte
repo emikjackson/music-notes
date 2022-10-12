@@ -7,11 +7,11 @@
 </script>
 
 <svelte:head>
- <title>Music Notes</title>
+ <title>Different Title</title>
 </svelte:head>
 
 <div class="tile">
-  <h1>Music Notes</h1>
+  <h1>Different Title</h1>
   <p>Visit <a href="/about">about</a> page</p>
   <Button onClick={togglePaused}>
     {paused ? 'Play' : 'Pause'}
