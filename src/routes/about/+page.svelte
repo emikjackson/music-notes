@@ -1,5 +1,5 @@
 <script>
-  import Button from '$lib/button.svelte'
+  import Button from '$lib/Button.svelte'
 	async function getFirstPost() {
 		// const res = await fetch(`/tutorial/random-number`);
 		// const text = await res.text();

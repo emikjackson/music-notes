@@ -1,11 +1,10 @@
 <!-- At the root level of `/routes`, this layout applies to every page! -->
 
-<nav>
-  <a href="/">Home</a>
-  <a href="/about">About</a>
-  <a href="/blog/hello-world">Blog</a>
-  <a href="/form">Form</a>
-</nav>
+<script>
+	import Header from '$lib/Header.svelte'
+</script>
+
+<Header />
 
 <div class="centered">
   <slot></slot>

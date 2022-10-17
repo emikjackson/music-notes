@@ -1,5 +1,5 @@
 <script>
-  import Button from '$lib/button.svelte'
+  import Button from '$lib/Button.svelte'
   import { onMount, onDestroy } from 'svelte';
 
 	let name = 'world';
