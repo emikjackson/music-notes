@@ -1,7 +1,7 @@
 import { notes } from "../constants/notes";
 
-const quarterNotes = notes.filter(note => note.type === 'quarter');
-const eighthNotes = notes.filter(note => note.type === 'quarter');
+export const quarterNotes = notes.filter(note => note.type === 'quarter');
+export const eighthNotes = notes.filter(note => note.type === 'eighth');
 
 // Return random integer with exclusive maximum set [0,max)
 export const getRandomInt = (max) => Math.floor(Math.random() * max);
@@ -35,3 +35,13 @@ export const addPlayProperties = (notes) => notes.map(note => ({ ...note, paused
 
 // Fetch the root note by given key (to use as a reference note)
 export const getRootNote = () => quarterNotes.find(note => note.num === 1);
+
+// Return true if notes match answer
+export const compareNotesToAnswer = (notes, answers) => {
+  for (let i = 0; i < notes.length; i++) {
+    if (notes[i].num !== answers[i]) {
+      return false;
+    }
+  }
+  return true;
+}

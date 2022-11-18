@@ -11,6 +11,9 @@
 </div>
 
 <style>
+	:global(:root){
+		--primary: #6d2f10;
+	}
 	.centered {
 		display: flex;
 		flex-direction: column;

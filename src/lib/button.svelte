@@ -6,9 +6,11 @@
   export let wide = false; // 100% width
   export let secondary = false; // inverted colors
   export let style = "";
+  export let withIcon = false;
+  export let linkLike = false; // link styling
 </script>
 
-<button on:click style={`margin:${margin};${style}`} disabled={disabled} class:disabled class:wide class:secondary>
+<button on:click style={`margin:${margin};${style}`} disabled={disabled} class:disabled class:wide class:secondary class:withIcon class:linkLike>
   <slot />
 </button>
 
@@ -36,11 +38,26 @@
   .wide {
     width: 100%;
   }
+  .withIcon {
+    display: flex;
+    align-items: center;
+  }
   .secondary {
 		background-color: #fff;
 		color: #008060;
   }
   button.secondary:hover {
     background-color: rgb(247, 247, 247);
+  }
+  .linkLike {
+    background-color: transparent;
+    padding: 0px;
+    color: #008060;
+    border: none;
+    box-shadow: none;
+    text-decoration: underline;
+  }
+  .linkLike:hover {
+    background-color: transparent;
   }
 </style>

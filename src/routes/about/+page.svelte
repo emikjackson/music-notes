@@ -26,26 +26,9 @@
 
 <div class="tile">
   <h1>About</h1>
-  <p>Back to <a href="/">home</a> page</p>
-  <a href="/blog/hello-world">Blog (hello world)</a>
-  <a href="/blog/nasdkajsdl">Blog (nasdkajsdl)</a>
-  <br/>
-  <br/>
-
-  <Button on:click={handleClick}>
-    Get post
-  </Button>
-  
-  <div class="post">
-    {#await promise}
-      <p>...waiting</p>
-    {:then post}
-      <h4>{post.title}</h4>
-      <p>{post.body}</p>
-    {:catch error}
-      <p style="color: red">{error.message}</p>
-    {/await}
-  </div>
+  <p>Site made for my pops, Alan Jackson, to perhaps help train his ear.</p>
+  <p>The beautiful tones you hear come straight from Alan's guitar.</p>
+  <p>Created by Emi Jackson in Svelte.</p>
 </div>
 
 
@@ -53,12 +36,10 @@
   h1 {
     text-align: center;
   }
-  .post {
-    padding: 20px;
-    background-color: white;
-    border: 1px solid blanchedalmond;
-    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
-    width: 600px;
-    margin: 10px 0px;
+  .tile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 </style>

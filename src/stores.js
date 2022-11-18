@@ -44,7 +44,7 @@ export const time = readable(new Date(), function start(set) {
 const createTimer = () => {
 	const { subscribe, set, update } = writable(0);
 	let interval = null
-	const intervalDurationMs = 100;
+	const intervalDurationMs = 50;
 
 	const toggle = (paused) => {
 		if (paused) {
