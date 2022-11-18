@@ -1,25 +1,3 @@
-<script>
-  import Button from '$lib/Button.svelte'
-	async function getFirstPost() {
-		// const res = await fetch(`/tutorial/random-number`);
-		// const text = await res.text();
-    const res = await fetch(`https://jsonplaceholder.typicode.com/posts/1`);
-    const post = await res.json();
-
-		if (res.ok) {
-			return post;
-		} else {
-			throw new Error(post);
-		}
-	}
-
-	let promise = getFirstPost();
-
-	function handleClick() {
-		promise = getFirstPost();
-	}
-</script>
-
 <svelte:head>
  <title>Music Notes: About</title>
 </svelte:head>

@@ -8,7 +8,7 @@
   import pauseIcon from '$lib/assets/pause.svg';
   import playIconGrey from '$lib/assets/play_grey.svg';
   import pauseIconGrey from '$lib/assets/pause_grey.svg';
-	import ProgressCircle from '../lib/ProgressCircle.svelte';
+	import ProgressCircle from '$lib/ProgressCircle.svelte';
 
   // Playing & note generation state
   let activeNoteIdx = 0;
@@ -88,6 +88,10 @@
     answerArray = getEmptyArrayOfLengthN(numNotesToGenerate)
   }
 </script>
+
+<svelte:head>
+ <title>Music Notes: About</title>
+</svelte:head>
 
 <div class="settings">
   <div class="settings-row">
@@ -223,10 +227,6 @@
     TODO ADD MOBILE
   } */
   .settings-row > div {
-    text-align: center;
-  }
-  .settings-footer {
-    margin-top: 10px;
     text-align: center;
   }
   .notes-slider {
