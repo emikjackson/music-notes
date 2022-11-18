@@ -6,9 +6,10 @@
   export let wide = false; // 100% width
   export let secondary = false; // inverted colors
   export let style = "";
+  export let link = false;
 </script>
 
-<button on:click style={`margin:${margin};${style}`} disabled={disabled} class:disabled class:wide class:secondary>
+<button on:click style={`margin:${margin};${style}`} disabled={disabled} class:disabled class:wide class:secondary class:link>
   <slot />
 </button>
 
@@ -42,5 +43,15 @@
   }
   button.secondary:hover {
     background-color: rgb(247, 247, 247);
+  }
+  .link {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    text-decoration: underline;
+    color: #008060;
+  }
+  .link:hover {
+    background-color: transparent;
   }
 </style>

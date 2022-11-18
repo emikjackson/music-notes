@@ -173,7 +173,7 @@
     {:else}
       {#if !revealAnswer}
         <p class="incorrect-msg">Hmmm... not quite right...</p>
-        <Button linkLike on:click={() => revealAnswer = !revealAnswer}>
+        <Button link on:click={() => revealAnswer = !revealAnswer}>
           I give up! Show me the answer.
         </Button>
       {:else}
