@@ -2,7 +2,7 @@
   import { getRandomNotes, addPlayProperties, getRootNote, compareNotesToAnswer } from '$lib/helpers/notes.js'
   import { GScale } from '$lib/constants/notes.js'
   import { timer } from '../stores.js';
-  import Button from '$lib/Button.svelte';
+  import DiffButton from '$lib/DiffButton.svelte';
   import playIcon from '$lib/assets/play.svg';
   import pauseIcon from '$lib/assets/pause.svg';
   import playIconGrey from '$lib/assets/play_grey.svg';
@@ -123,7 +123,7 @@
         Mixed
       </label>
     </div>
-    <Button disabled={!fieldsChanged} on:click={handleUpdateNotes}>Update notes</Button>
+    <DiffButton disabled={!fieldsChanged} on:click={handleUpdateNotes}>Update notes</DiffButton>
   </div>
 </div>
 
@@ -167,23 +167,23 @@
 
     {#if compareNotesToAnswer(notes, answerArray)}
       <p class="correct-msg">Huzzah!!! You got it right!</p>
-      <Button on:click={handleUpdateNotes}>
+      <DiffButton on:click={handleUpdateNotes}>
         Get new notes
-      </Button>
+      </DiffButton>
     {:else}
       {#if !revealAnswer}
         <p class="incorrect-msg">Hmmm... not quite right...</p>
-        <Button linkLike on:click={() => revealAnswer = !revealAnswer}>
+        <DiffButton linkLike on:click={() => revealAnswer = !revealAnswer}>
           I give up! Show me the answer.
-        </Button>
-      {:else}
+        </DiffButton>
+      {:else}DiffButton
         <p>The correct answer was ...</p>
         <p class="notes-answer">
           {notes.map(note => `${note.num} ${note.value}`).join(', ')}
         </p>
-        <Button on:click={handleUpdateNotes}>
+        <DiffButton on:click={handleUpdateNotes}>
           Get new notes
-        </Button>
+        </DiffButton>
       {/if}
     {/if}
 

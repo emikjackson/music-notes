@@ -6,10 +6,9 @@
   export let wide = false; // 100% width
   export let secondary = false; // inverted colors
   export let style = "";
-  export let withIcon = false;
 </script>
 
-<button on:click style={`margin:${margin};${style}`} disabled={disabled} class:disabled class:wide class:secondary class:withIcon>
+<button on:click style={`margin:${margin};${style}`} disabled={disabled} class:disabled class:wide class:secondary>
   <slot />
 </button>
 
@@ -40,10 +39,6 @@
   .secondary {
 		background-color: #fff;
 		color: #008060;
-  }
-  .withIcon {
-    display: flex;
-    align-items: center;
   }
   button.secondary:hover {
     background-color: rgb(247, 247, 247);
