@@ -1,5 +1,5 @@
 <svelte:head>
- <title>Music Notes: About</title>
+ <title>Music Note Tester: About</title>
 </svelte:head>
 
 <div class="tile">

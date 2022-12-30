@@ -1,7 +1,7 @@
-import { notes } from "../constants/notes";
+import { GNotes, DNotes } from "../constants/notes";
 
-export const quarterNotes = notes.filter(note => note.type === 'quarter');
-export const eighthNotes = notes.filter(note => note.type === 'eighth');
+export const getQuarterNotes = notes => notes.filter(note => note.type === 'quarter');
+export const getEighthNotes = notes => notes.filter(note => note.type === 'eighth');
 
 // Return random integer with exclusive maximum set [0,max)
 export const getRandomInt = (max) => Math.floor(Math.random() * max);
@@ -19,11 +19,12 @@ export const getRandomNotesFromArray = (numNotes, notesArray) => {
 // Return array of length 'numNotes' of random notes
 // noteType should be 'quarter', 'eighth', or 'mixed'
 export const getRandomNotes = (numNotes, noteType, key, includeDuplicates) => {
+  const notes = key === 'G' ? GNotes : DNotes;
   if (noteType === 'quarter') {
-    return getRandomNotesFromArray(numNotes, quarterNotes);
+    return getRandomNotesFromArray(numNotes, getQuarterNotes(notes));
   }
   else if (noteType === 'eighth') {
-    return getRandomNotesFromArray(numNotes, eighthNotes);
+    return getRandomNotesFromArray(numNotes, getEighthNotes(notes));
   }
   else {
     return getRandomNotesFromArray(numNotes, notes);
@@ -34,7 +35,7 @@ export const getRandomNotes = (numNotes, noteType, key, includeDuplicates) => {
 export const addPlayProperties = (notes) => notes.map(note => ({ ...note, paused: true, duration: 0 }))
 
 // Fetch the root note by given key (to use as a reference note)
-export const getRootNote = () => quarterNotes.find(note => note.num === 1);
+export const getRootNote = (key) => getQuarterNotes(key === 'G' ? GNotes : DNotes).find(note => note.num === 1);
 
 // Return true if notes match answer
 export const compareNotesToAnswer = (notes, answers) => {

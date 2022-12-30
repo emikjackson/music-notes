@@ -1,6 +1,6 @@
 <script>
   import { getRandomNotes, addPlayProperties, getRootNote, compareNotesToAnswer } from '$lib/helpers/notes.js'
-  import { GScale } from '$lib/constants/notes.js'
+  import { GScale, DScale } from '$lib/constants/notes.js'
   import { timer } from '../stores.js';
   import Button from '$lib/Button.svelte';
   import playIcon from '$lib/assets/play.svg';
@@ -17,6 +17,7 @@
   let durationMs = 1000;
   let progress = 0;
   let key = 'G';
+  let scale = GScale;
   let fieldsChanged = false;
   let rootNotePaused = true;
   let activeSettings = {
@@ -37,10 +38,10 @@
   let answerArray = getEmptyArrayOfLengthN(numNotesToGenerate);
 
   // fetch a new batch of notes based on given state (numNotesToGenerate & noteType)
-  const getNotes = () => addPlayProperties(getRandomNotes(numNotesToGenerate, noteType))
-  // timer.reset();
+  const getNotes = () => addPlayProperties(getRandomNotes(numNotesToGenerate, noteType, key))
 
   let notes = getNotes();
+  $: console.log(notes)
   $: paused = notes[activeNoteIdx].paused;
   $: durationMs = notes.reduce((total, note) => {
     if (note.type === 'quarter') {
@@ -54,7 +55,7 @@
   $: fieldsChanged = activeSettings.numNotesToGenerate !== numNotesToGenerate
                   || activeSettings.key !== key
                   || activeSettings.noteType !== noteType
-  
+  $: scale = activeSettings.key === 'G' ? GScale : DScale;
 
   const handlePlayPause = () => {
     notes[activeNoteIdx].paused = !paused;
@@ -86,10 +87,11 @@
     activeSettings = { numNotesToGenerate, key, noteType }
     answerArray = getEmptyArrayOfLengthN(numNotesToGenerate)
   }
+
 </script>
 
 <svelte:head>
- <title>Music Notes: About</title>
+ <title>Music Note Tester</title>
 </svelte:head>
 
 <div class="settings">
@@ -145,10 +147,10 @@
   </ProgressCircle>
   <div class="root-note-wrapper">
     <button class="root-note" on:click={() => rootNotePaused = !rootNotePaused}>
-      {key}
+      {activeSettings.key}
       <img src={rootNotePaused ? playIconGrey : pauseIconGrey} alt="" />
     </button>
-    <audio controls={false} src={getRootNote().src} bind:paused={rootNotePaused} />
+    <audio controls={false} src={getRootNote(activeSettings.key).src} bind:paused={rootNotePaused} />
   </div>
 </div>
 
@@ -157,7 +159,7 @@
   <div class="answer-notes">
     {#each notes as note, idx (`${note.name}_input_${idx}`)}
     <select bind:value={answerArray[idx]}>
-      {#each GScale as scaleNote, scaleNoteIdx (`${scaleNote}_${idx}_${scaleNoteIdx}`)}
+      {#each scale as scaleNote, scaleNoteIdx (`${scaleNote}_${idx}_${scaleNoteIdx}`)}
         <option value={scaleNoteIdx + 1}>{scaleNoteIdx + 1} {scaleNote}</option>
       {/each}
     </select>  
@@ -216,18 +218,27 @@
     justify-content: center;
   }
   .settings-row {
-    display: grid;
-    grid-template-columns: 20% 20% 40% 20%; 
-    align-items: flex-end;
     width: 900px;
     max-width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 40px;
+    justify-content: center;
   }
-  /* @media (max-width: 1250px) {
-    TODO ADD MOBILE
-  } */
+
   .settings-row > div {
     text-align: center;
   }
+
+  @media (max-width: 800px) {
+    .settings-row {
+      column-gap: 15px;
+      row-gap: 20px;
+      transition: all 0.2s linear;
+    }
+  }
+
   .notes-slider {
     display: flex;
     align-items: center;
