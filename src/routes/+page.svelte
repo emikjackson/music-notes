@@ -150,23 +150,30 @@
       {activeSettings.key}
       <img src={rootNotePaused ? playIconGrey : pauseIconGrey} alt="" />
     </button>
+    Root
     <audio controls={false} src={getRootNote(activeSettings.key).src} bind:paused={rootNotePaused} />
   </div>
 </div>
 
 <div class="answer-wrapper">
-  <h3>Your answer</h3>
   <div class="answer-notes">
     {#each notes as note, idx (`${note.name}_input_${idx}`)}
-    <select bind:value={answerArray[idx]}>
-      {#each scale as scaleNote, scaleNoteIdx (`${scaleNote}_${idx}_${scaleNoteIdx}`)}
-        <option value={scaleNoteIdx + 1}>{scaleNoteIdx + 1} {scaleNote}</option>
-      {/each}
-    </select>  
+    <div>
+      <h3>Note {idx + 1}</h3>
+      <ul class="note-column">
+        {#each scale as scaleNote, scaleNoteIdx (`${scaleNote}_${idx}_${scaleNoteIdx}`)}
+          {@const id = `note-${idx}-${scaleNoteIdx}`}
+          {@const value = scaleNoteIdx + 1}
+          <li>
+            <input type="radio" bind:group={answerArray[idx]} {id} name={`note-${idx}`} {value} />
+            <label for={id}>{scaleNote} <span style="color:#aaa;margin-left: 6px;">{value}</span></label>
+          </li>
+        {/each}
+      </ul>
+    </div>
   {/each}  
   </div>
   {#if answerArray.every(answer => answer !== '')}
-
     {#if compareNotesToAnswer(notes, answerArray)}
       <p class="correct-msg">Huzzah!!! You got it right!</p>
       <Button on:click={handleUpdateNotes}>
@@ -179,7 +186,7 @@
           I give up! Show me the answer.
         </Button>
       {:else}
-        <p>The correct answer was ...</p>
+        <p style="margin-bottom: 0px;">The correct answer was ...</p>
         <p class="notes-answer">
           {notes.map(note => `${note.num} ${note.value}`).join(', ')}
         </p>
@@ -188,7 +195,6 @@
         </Button>
       {/if}
     {/if}
-
   {/if}
 </div>
 
@@ -208,8 +214,7 @@
   .settings {
     background-color: rgb(230, 239, 234);
     border-radius: 0px 0px 8px 8px;
-    padding: 10px 20px;
-    padding-bottom: 20px;
+    padding: 15px 20px;
     box-sizing: border-box;
     box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.06);
     margin-bottom: 30px;
@@ -224,6 +229,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     column-gap: 40px;
+    row-gap: 20px;
     justify-content: center;
   }
 
@@ -231,11 +237,19 @@
     text-align: center;
   }
 
+  .settings-row h4 {
+    margin-top: 5px;
+  }
+
   @media (max-width: 800px) {
     .settings-row {
       column-gap: 15px;
-      row-gap: 20px;
+      row-gap: 10px;
       transition: all 0.2s linear;
+    }
+    .settings {
+      padding: 10px 0px 5px 0px;
+      margin-bottom: 15px;
     }
   }
 
@@ -257,6 +271,14 @@
   }
   .root-note-wrapper {
     width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: grey;
+    font-style: italic;
+    margin-left: 10px;
+    font-size: 0.8rem;
   }
   .root-note {
     background-color: #e1e1e1;
@@ -287,14 +309,86 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  .answer-notes select {
-    margin: 0px 10px;
-    font-size: 1.5rem;
-    padding: 10px;
+    margin-bottom: 60px;
   }
   h4 {
     margin-bottom: 10px;
     margin-top: 10px;
+  }
+
+  /* Button-like radio buttons */
+
+  .answer-notes {
+    display: flex;
+  }
+
+  .answer-notes h3 {
+    font-size: 1rem;
+    margin: 20px 0px 10px 0px;
+    text-align: center;
+  }
+
+  .note-column {
+    list-style-type: none;
+    padding: 0px;
+    display: flex;
+    flex-direction: column-reverse;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.08);
+    margin: 0px 10px;
+  }
+
+  .note-column li {
+    width: 80px;
+    height: 30px;
+    position: relative;
+  }
+
+  .note-column label,
+  .note-column input {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .note-column input[type="radio"] {
+    opacity: 0.01;
+    z-index: 100;
+  }
+
+  .note-column input[type="radio"]:checked+label {
+    background-color: #cff0d6;
+  }
+
+  .note-column label {
+    padding: 5px;
+    border: 1px solid #CCC;
+    border-bottom: 0px solid #CCC;
+    z-index: 90;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+  }
+
+  .note-column li:last-child label {
+    border-radius: 8px 8px 0px 0px;
+  }
+
+  .note-column li:first-child label {
+    border-radius: 0px 0px 8px 8px;
+    border-bottom: 1px solid #CCC;
+  }
+
+  .note-column label:hover, .note-column li:hover label {
+    background-color: #DDD;
+    cursor: pointer;
+  }
+
+  .note-column input {
+    cursor: pointer;
   }
 </style>

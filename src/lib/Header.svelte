@@ -14,7 +14,7 @@
     box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.1);
     display: flex;
     justify-content: space-between;
-    
+    transition: padding 0.2s ease;
   }
   a {
     margin-right: 10px;
@@ -26,5 +26,11 @@
     font-size: 1.2rem;
     text-decoration: none;
     font-weight: 500;
+  }
+
+  @media (max-width: 800px) {
+    nav {
+      padding: 13px 10px 10px 20px;
+    }
   }
 </style>

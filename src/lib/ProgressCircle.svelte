@@ -21,8 +21,8 @@
   .progress-circle {
     background: var(--background);
     border-radius: 50%;
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
     transition: all 0.2s ease;
     will-change: transform;
     display: flex;
