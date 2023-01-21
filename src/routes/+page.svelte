@@ -320,6 +320,9 @@
 
   .answer-notes {
     display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    justify-content: center;
   }
 
   .answer-notes h3 {
