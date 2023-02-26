@@ -1,8 +1,10 @@
-# Music Notes
+# Music Note Tester :musical_score: :notes:
 
-A site to test your ear with a simple note matching challenge.
 
-Live site: [https://music-notes.vercel.app/](https://music-notes.vercel.app/)
+
+A site to test your ear with a **simple note matching challenge**.
+
+**Live site: [https://music-notes.vercel.app/](https://music-notes.vercel.app/)**
 
 This site was built using Svelte and [SvelteKit](https://github.com/sveltejs/kit/tree/master/packages/create-svelte)!
 
