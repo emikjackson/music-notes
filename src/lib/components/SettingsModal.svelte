@@ -72,12 +72,12 @@
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #bbb;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
   }
   .content > label:first-child {
     border-top: 1px solid #bbb;
-    padding-top: 15px;
+    padding-top: 20px;
   }
   .notes-slider {
     display: flex;
