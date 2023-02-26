@@ -1,6 +1,4 @@
-<svelte:head>
- <title>Music Note Tester: About</title>
-</svelte:head>
+<!-- About page -->
 
 <div class="tile">
   <h1>About</h1>

@@ -1,3 +1,5 @@
+<!-- Main navigation header -->
+
 <nav>
   <a href="/">Music Note Tester</a>
   <div>

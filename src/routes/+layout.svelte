@@ -1,7 +1,8 @@
-<!-- At the root level of `/routes`, this layout applies to every page! -->
-
 <script>
-	import Header from '$lib/Header.svelte'
+	/**
+	 * At the root level of the routes, this layout defines styling applied to every page
+	*/
+	import Header from '$lib/components/Header.svelte'
 </script>
 
 <Header />

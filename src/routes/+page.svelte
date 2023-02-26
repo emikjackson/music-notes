@@ -1,13 +1,18 @@
 <script>
+  /**
+   * Main page of app with settings & note quiz!
+  */
   import { getRandomNotes, addPlayProperties, getRootNote, compareNotesToAnswer } from '$lib/helpers/notes.js'
   import { GScale, DScale } from '$lib/constants/notes.js'
   import { timer } from '../stores.js';
-  import Button from '$lib/Button.svelte';
+  import Button from '$lib/components/Button.svelte';
   import playIcon from '$lib/assets/play.svg';
   import pauseIcon from '$lib/assets/pause.svg';
+  import newArrowsIcon from '$lib/assets/new_arrows.svg';
   import playIconGrey from '$lib/assets/play_grey.svg';
   import pauseIconGrey from '$lib/assets/pause_grey.svg';
-	import ProgressCircle from '$lib/ProgressCircle.svelte';
+	import ProgressCircle from '$lib/components/ProgressCircle.svelte';
+  import SettingsModal from '$lib/components/SettingsModal.svelte';
 
   // Playing & note generation state
   let activeNoteIdx = 0;
@@ -18,8 +23,9 @@
   let progress = 0;
   let key = 'G';
   let scale = GScale;
-  let fieldsChanged = false;
   let rootNotePaused = true;
+  let showSettingsModal = false;
+  let newNotesAnimDegrees = 0;
   let activeSettings = {
     numNotesToGenerate,
     key,
@@ -41,7 +47,6 @@
   const getNotes = () => addPlayProperties(getRandomNotes(numNotesToGenerate, noteType, key))
 
   let notes = getNotes();
-  $: console.log(notes)
   $: paused = notes[activeNoteIdx].paused;
   $: durationMs = notes.reduce((total, note) => {
     if (note.type === 'quarter') {
@@ -52,9 +57,6 @@
     return total;
   }, 0) * 1000;
   $: progress = durationMs === 0 ? 0 : (($timer / durationMs) || 0);
-  $: fieldsChanged = activeSettings.numNotesToGenerate !== numNotesToGenerate
-                  || activeSettings.key !== key
-                  || activeSettings.noteType !== noteType
   $: scale = activeSettings.key === 'G' ? GScale : DScale;
 
   const handlePlayPause = () => {
@@ -78,6 +80,7 @@
     }
   }
 
+  // Reset answers and get new set of notes
   const handleUpdateNotes = () => {
     // close out current progress, then set new notes
     activeNoteIdx = 0;
@@ -88,53 +91,64 @@
     answerArray = getEmptyArrayOfLengthN(numNotesToGenerate)
   }
 
+  // Handler for "New notes" button with arrows icon. Fetches new arrows & spins icon.
+  const handleNewNotesClick = () => {
+    // Spin arrows
+    const newNotesIcon = document.getElementById('newNotesIcon')
+    newNotesAnimDegrees += 360;
+    newNotesIcon.style.transform = `rotate(${newNotesAnimDegrees}deg)`;
+    // Get new notes
+    handleUpdateNotes();
+  }
+
+  // Save settings and close settings modal
+  const handleSettingsSave = () => {
+    handleUpdateNotes(); 
+    showSettingsModal = false;
+  }
+
+  // Close settings modal & reset temp values to active settings
+  const handleSettingsCancel = () => {
+    showSettingsModal = false;
+    numNotesToGenerate = activeSettings.numNotesToGenerate;
+    noteType = activeSettings.noteType;
+    key = activeSettings.key;
+  }
 </script>
 
-<svelte:head>
- <title>Music Note Tester</title>
-</svelte:head>
+<!-- Notes settings modal (change note type, num notes, etc.) - only shown when "showSettingsModal" is true -->
+{#if showSettingsModal}
+  <SettingsModal 
+    bind:numNotesToGenerate={numNotesToGenerate}
+    bind:noteType={noteType}
+    bind:key={key}
+    bind:activeSettings={activeSettings}
+    onSave={handleSettingsSave}
+    onCancel={handleSettingsCancel} />
+{/if}
 
+<!-- Display currently active settings & prompt to open settings modal -->
 <div class="settings">
-  <div class="settings-row">
-    <div>
-      <h4>Key:</h4>
-      <select bind:value={key}>
-        <option value="G">G</option>
-        <option value="D">D</option>
-      </select>  
-    </div>
-    <div>
-      <h4>Number of notes:</h4>
-      <div class="notes-slider">
-        {numNotesToGenerate}
-        <input type="range" bind:value={numNotesToGenerate} max={6} min={1} step={1} list="tickmarks" />
-      </div>
-    </div>
-    <div>
-      <h4>Note type:</h4>
-      <label>
-        <input type=radio bind:group={noteType} name="noteType" value='eighth'>
-        Eighth
-      </label>
-      <label>
-        <input type=radio bind:group={noteType} name="noteType" value='quarter'>
-        Quarter
-      </label>
-      <label>
-        <input type=radio bind:group={noteType} name="noteType" value='mixed'>
-        Mixed
-      </label>
-    </div>
-    <Button disabled={!fieldsChanged} on:click={handleUpdateNotes}>Update notes</Button>
+  <div>
+    Playing <strong>{activeSettings.numNotesToGenerate} {activeSettings.noteType} notes</strong> in key of <strong>{activeSettings.key}</strong>. 
   </div>
+  <Button on:click={() => showSettingsModal = true} link style="margin:0px;margin-left:5px;padding:0px;font-size:1rem;">
+    Change note settings.
+  </Button>
 </div>
 
-
+<!-- Big play button and root-note button section. Plays audio snippets. -->
 <div class='play-progress'>
-  <div class="root-note-wrapper"></div>
+  <div class="lil-circle-wrapper">
+    <button class="lil-circle-button" on:click={() => rootNotePaused = !rootNotePaused}>
+      {activeSettings.key}
+      <img src={rootNotePaused ? playIconGrey : pauseIconGrey} alt="" />
+    </button>
+    Root
+    <audio controls={false} src={getRootNote(activeSettings.key).src} bind:paused={rootNotePaused} />
+  </div>
   <ProgressCircle {progress} on:click={handlePlayPause}>
     <img src={paused ? playIcon : pauseIcon} alt="" />
-  
     {#each notes as note, idx (`${note.name}_audio_${idx}`)}
       <audio
         src={note.src}
@@ -145,17 +159,17 @@
         />
     {/each}  
   </ProgressCircle>
-  <div class="root-note-wrapper">
-    <button class="root-note" on:click={() => rootNotePaused = !rootNotePaused}>
-      {activeSettings.key}
-      <img src={rootNotePaused ? playIconGrey : pauseIconGrey} alt="" />
+  <div class="lil-circle-wrapper new-notes">
+    <button class="lil-circle-button" on:click={handleNewNotesClick}>
+      <img id="newNotesIcon" class="smooth" src={newArrowsIcon} alt="" />
     </button>
-    Root
-    <audio controls={false} src={getRootNote(activeSettings.key).src} bind:paused={rootNotePaused} />
+    New notes
   </div>
 </div>
 
+<!-- Answer submit section (selectable column for each note) & answer display -->
 <div class="answer-wrapper">
+  <!-- Note select columns -->
   <div class="answer-notes">
     {#each notes as note, idx (`${note.name}_input_${idx}`)}
     <div>
@@ -173,6 +187,7 @@
     </div>
   {/each}  
   </div>
+  <!-- Correct/incorrect answer displays -->
   {#if answerArray.every(answer => answer !== '')}
     {#if compareNotesToAnswer(notes, answerArray)}
       <p class="correct-msg">Huzzah!!! You got it right!</p>
@@ -188,7 +203,7 @@
       {:else}
         <p style="margin-bottom: 0px;">The correct answer was ...</p>
         <p class="notes-answer">
-          {notes.map(note => `${note.num} ${note.value}`).join(', ')}
+          {notes.map(note => `${note.value} ${note.num}`).join(', ')}
         </p>
         <Button on:click={handleUpdateNotes}>
           Get new notes
@@ -200,19 +215,21 @@
 
 <style>
   .correct-msg, .incorrect-msg, .notes-answer {
-    padding: 20px;
+    padding: 15px 20px;
     border-radius: 6px;
     background-color: #ffc6c6;
     box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.1);
+    margin-bottom: 0px;
   }
   .correct-msg {
     background-color: #cff0d6;
   }
   .notes-answer {
     background-color: #cfebf0;
+    margin-top: 5px;
   }
   .settings {
-    background-color: rgb(230, 239, 234);
+    background-color: #e6efea;
     border-radius: 0px 0px 8px 8px;
     padding: 15px 20px;
     box-sizing: border-box;
@@ -222,43 +239,12 @@
     display: flex;
     justify-content: center;
   }
-  .settings-row {
-    width: 900px;
-    max-width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    column-gap: 40px;
-    row-gap: 20px;
-    justify-content: center;
-  }
-
-  .settings-row > div {
-    text-align: center;
-  }
-
-  .settings-row h4 {
-    margin-top: 5px;
-  }
 
   @media (max-width: 800px) {
-    .settings-row {
-      column-gap: 15px;
-      row-gap: 10px;
-      transition: all 0.2s linear;
-    }
     .settings {
-      padding: 10px 0px 5px 0px;
+      padding: 10px 0px;
       margin-bottom: 15px;
     }
-  }
-
-  .notes-slider {
-    display: flex;
-    align-items: center;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-left: 5px;
   }
   .play-progress {
     display: flex;
@@ -269,18 +255,21 @@
     width: 40px;
     height: 60px;
   }
-  .root-note-wrapper {
-    width: 60px;
+
+  /* Base styling for the small circles next to the play button ("root" + "new notes" buttons) */
+
+  .lil-circle-wrapper {
+    width: 65px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     color: grey;
     font-style: italic;
-    margin-left: 10px;
+    margin: 0px 10px;
     font-size: 0.8rem;
   }
-  .root-note {
+  .lil-circle-button {
     background-color: #e1e1e1;
     border-radius: 50%;
     height: 50px;
@@ -297,26 +286,53 @@
     cursor: pointer;
     opacity: 1;
   }
-  .root-note:hover {
+  .lil-circle-button:hover {
     opacity: 0.9;
     transition: opacity 0.2s linear;
   }
-  .root-note-wrapper img {
+  .lil-circle-wrapper img {
     width: 12px;
     height: 19px;
   }
+
+  /* Adjust lil-circle classes for "new notes" custom styling (green + larger image) */
+
+  .lil-circle-wrapper.new-notes {
+    margin-left: 8px;
+  }
+  .lil-circle-wrapper.new-notes img {
+    width: 30px;
+    height: 30px;
+  }
+  .lil-circle-wrapper.new-notes .lil-circle-button {
+    background-color: #cfe7da;
+    border: 2px solid #157a61;
+  }
+  .smooth {
+    -webkit-transition: transform 1.5s ease;  
+    -moz-transition: transform 1.5s ease;  
+    -o-transition: transform 1.5s ease;  
+    -ms-transition: transform 1.5s ease;  
+    transition: transform 1.5s ease;
+  }
+
+  @keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+  }
+
+  /* Answer section styling */
+
   .answer-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 60px;
   }
-  h4 {
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-
-  /* Button-like radio buttons */
 
   .answer-notes {
     display: flex;
@@ -359,7 +375,7 @@
 
   .note-column input[type="radio"] {
     opacity: 0.01;
-    z-index: 100;
+    z-index: 2;
   }
 
   .note-column input[type="radio"]:checked+label {
@@ -370,7 +386,7 @@
     padding: 5px;
     border: 1px solid #CCC;
     border-bottom: 0px solid #CCC;
-    z-index: 90;
+    z-index: 1;
     display: inline-flex;
     justify-content: center;
     align-items: center;

@@ -1,5 +1,8 @@
 <script>
-  // Orig from https://svelte.dev/repl/f1437286b08d4890b9207180868ee37e?version=3.46.4
+  /**
+   * Circle that takes in a "progress" value between 0 and 1 and shows corresponding a green fill 
+   * Orig from https://svelte.dev/repl/f1437286b08d4890b9207180868ee37e?version=3.46.4
+   */
 	export let progress;
 
   let background = '';

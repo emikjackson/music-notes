@@ -1,6 +1,7 @@
-<!-- Common button component -->
-
 <script>
+  /**
+   * Simple button
+   */
   export const margin = '10px 0px';
   export let disabled = false; // will not fire on:click & 50% opacity
   export let wide = false; // 100% width
