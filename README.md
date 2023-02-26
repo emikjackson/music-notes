@@ -1,62 +1,15 @@
-# create-svelte
+# Music Notes
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+A site to test your ear with a simple note matching challenge.
 
-## Creating a project
+Live site: [https://music-notes.vercel.app/](https://music-notes.vercel.app/)
 
-If you're seeing this, you've probably already done this step. Congrats!
+This site was built using Svelte and [SvelteKit](https://github.com/sveltejs/kit/tree/master/packages/create-svelte)!
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## Running the project
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+To run this project locally, you should have at least Node version 16 installed.
 
-## Developing
+First, clone this directory. Once inside at the root level, run `npm install`.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-
-## Emi Notes
-
-### If/else
-
-```
-  {#if x > 10}
-  {:else if x > 5}
-  {:else}
-  {/if}    
-```
-
-### Each loops
-
-```
-{#each cats as cat, i}
-	<li><a target="_blank" href="https://www.youtube.com/watch?v={cat.id}">
-		{i + 1}: {cat.name}
-	</a></li>
-{/each}
-```
-
-Note: use `{#each cats as cat, i (cat.id)}` when keys are needed (mutation)
+Once all dependencies are installed, run `npm run dev` or `npm run dev -- --open` (to open a new browser tab) to start the development server.
