@@ -132,7 +132,7 @@
   <div>
     Playing <strong>{activeSettings.numNotesToGenerate} {activeSettings.noteType} notes</strong> in key of <strong>{activeSettings.key}</strong>. 
   </div>
-  <Button on:click={() => showSettingsModal = true} link style="margin:0px;margin-left:5px;padding:0px;font-size:1rem;">
+  <Button on:click={() => showSettingsModal = true} link style="margin:0px;padding:0px;font-size:1rem;">
     Change note settings.
   </Button>
 </div>
@@ -238,6 +238,11 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+  }
+  .settings > div {
+    text-align: center;
+    margin-right: 5px;
   }
 
   @media (max-width: 800px) {
